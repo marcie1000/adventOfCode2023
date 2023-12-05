@@ -46,14 +46,13 @@ def complete_number(txt, posi, posj, nb_rows, nb_cols):
     txt[posi] = txt[posi][:minj] + ((maxj + 1 - minj) * '.') + txt[posi][maxj + 1:]
     return sub, txt
 
-# Converts adjacent digits chars in a row in integers and sums them up
+# Converts adjacent digits chars in a row in integers and adds them
 def extract_d_and_sum(s):
     l = re.findall(digit_pattern, s)
     add = 0
     for i in l:
         if(i.isdigit()):
             add += int(i)
-            test.append(int(i))
     return add
 
 def search_adj_digit(txt, s_pos):
