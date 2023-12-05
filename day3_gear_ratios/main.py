@@ -125,9 +125,6 @@ def part2():
     add = search_adj_digit_gears(txt, s_pos)
     print("Part 2 : the sum of gears ratios is:", add)
 
-
-
-
-#part1()
+part1()
 part2()
 
