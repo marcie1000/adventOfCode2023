@@ -93,7 +93,7 @@ bool giveTextNumbers(char *ln, char *first, char *last, int *ftp, int *ltp)
 
 int main(int argc, char **argv)
 {
-    FILE *inputf = fopen("input", "r");
+    FILE *inputf = fopen("input.txt", "r");
     if(NULL == inputf)
     {
         perror("fopen: ");
