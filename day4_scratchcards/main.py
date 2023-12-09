@@ -41,14 +41,12 @@ def cardCopies(win, my):
     qCard = [1] * 198
     i = 0
     for wincard in win:
-        print("Part 2: computing card", i, end='\r')
-        for q in range(0, qCard[i]):
-            cardGoodNum = 0
-            for w in wincard:
-                if w in my[i]:
-                    cardGoodNum += 1
-            for j in range(1, cardGoodNum + 1):
-                qCard[i + j] += 1
+        cardGoodNum = 0
+        for w in wincard:
+            if w in my[i]:
+                cardGoodNum += 1
+        for j in range(1, cardGoodNum + 1):
+            qCard[i + j] += qCard[i]
         i += 1
 
     # print number of each card
