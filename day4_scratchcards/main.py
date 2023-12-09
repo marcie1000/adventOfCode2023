@@ -37,10 +37,33 @@ def calcPoints(win, my):
         i += 1
     return add
 
+def cardCopies(win, my):
+    qCard = [1] * 198
+    i = 0
+    for wincard in win:
+        print("Part 2: computing card", i, end='\r')
+        for q in range(0, qCard[i]):
+            cardGoodNum = 0
+            for w in wincard:
+                if w in my[i]:
+                    cardGoodNum += 1
+            for j in range(1, cardGoodNum + 1):
+                qCard[i + j] += 1
+        i += 1
+
+    # print number of each card
+    # print(qCard)
+    return sum(qCard)
+
+
 txt = readFile()
 winNumS, myNumS = splitParts(txt)
 totalCards = len(winNumS)
 winNumI = extractNumbers(winNumS)
 myNumI = extractNumbers(myNumS)
 add = calcPoints(winNumI, myNumI)
-print("The total number of points is :", add)
+print("Part 1: the total number of points is :", add)
+add = cardCopies(winNumI, myNumI)
+print("Part 2: the total number of cards is :", add)
+
+
