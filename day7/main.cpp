@@ -221,6 +221,11 @@ int main()
     std::string s;
     std::vector<std::vector<int>> vec;
 
+    if(!in.is_open())
+    {
+        std::cout << "Failed to open file.\n";
+        return(1);
+    }
     
     // Generate a number representing the hand, each card is represented
     // by a number from 1 to 13 (for part 1)
@@ -233,10 +238,6 @@ int main()
         std::vector<int> tmp = {0, 0, 0, 0, 0, 0, 0, 0};
         parseline(tmp, s);        
         int num { 0 }, num2 { 0 };
-        if(tmp[5] == 187 or tmp[5] == 633)
-        {
-            
-        }
         for(int i=0; i<5; i++)
         {
             double add { tmp[i] * pow(14., 4. - i) };

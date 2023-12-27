@@ -32,8 +32,8 @@ def predictBackwards(nb):
         nb[i - 1] = [nb[i - 1][0] - nb[i][0]] + nb[i - 1]
     return(nb[0][0])
 
-
-def part1(txt):
+if(__name__ == "__main__"):
+    txt = readfile()
     addF = 0
     addB = 0
     for t in txt:
@@ -47,7 +47,3 @@ def part1(txt):
         addB += predictBackwards(nb)
     print("Part 1:", addF)
     print("Part 2:", addB)
-
-if(__name__ == "__main__"):
-    txt = readfile()
-    part1(txt)
