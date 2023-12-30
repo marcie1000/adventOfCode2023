@@ -42,7 +42,6 @@ def resizeCol(txt, gal, q):
                 found = True
             j += 1
         if(not found):
-            #breakpoint()
             for k in range(len(gal)):
                 if(gal[k][0] >= i + add):
                     gal[k][0] += q
@@ -56,7 +55,6 @@ def resizeRow(txt, gal, q):
     add = 0
     while(i < len(txt)):
         if(not re.search('#', txt[i])):
-            #breakpoint()
             for k in range(len(gal)):
                 if(gal[k][1] >= i + add):
                     gal[k][1] += q
