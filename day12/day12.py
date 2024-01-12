@@ -5,24 +5,23 @@ def readFile():
         txt = f.readlines()
         return txt
 
-def parseLines(txt):
+def extractNumbers(txt):
     numbers = []
-    rex = []
+    # rex = []
     for t in txt:
-        regex = re.finditer(r"[?#]+", t)
+        # regex = re.finditer(r"[?#]+", t)
         nb = re.findall(r"\d+", t)
         for i in range(len(nb)):
             nb[i] = int(nb[i])
         numbers.append(nb)
-        rg = []
-        for r in regex:
-            rg.append([r.start(), len(r.group())])
-        rex.append(rg)
-    return numbers, rex
+        # rg = []
+        # for r in regex:
+        #     rg.append([r.start(), len(r.group())])
+        # rex.append(rg)
+    return numbers
 
 
-
-def stats(numbers, rex, ln):
+def stats(numbers, ln):
     qmarks = ln.count('?')
     sharps = ln.count('#')
     dots = ln.count('.')
@@ -32,9 +31,10 @@ def stats(numbers, rex, ln):
     seq = ln[:ln.find(' ')]
     shToFind = damaged - sharps
     dotToFind = oper - dots
-    st = {"qumarks": qmarks, "sharps": sharps, "dots": dots,
-          "total": total, "damaged": damaged, "oper": oper,
-          "seq": seq, "shToFind": shToFind, "dotToFind": dotToFind}
+    st = {"seq": seq, "shToFind": shToFind, "dotToFind": dotToFind}
+    # st = {"qumarks": qmarks, "sharps": sharps, "dots": dots,
+    #       "total": total, "damaged": damaged, "oper": oper,
+    #       "seq": seq, "shToFind": shToFind, "dotToFind": dotToFind}
     return st
 
 def tryToGuessNumbers(seq):
@@ -60,6 +60,8 @@ def testchar(sc, i, c, numbers):
     guess = tryToGuessNumbers(seqtest)
     j = 0
     for g in range(len(guess)):
+        if(len(guess) > len(numbers)):
+            return False
         if(guess[g] > numbers[g]):
             return False
         if(len(guess) == 0):
@@ -116,17 +118,69 @@ def scenarios(stat, numbers):
         if(not reld):
             s += 1
     # print("The len of scenar is", len(scenars))
-    return len(scenars)
+    lasttwo = [0,0,0,0]
+    for e in scenars:
+        if(e["seq"][-2:] == ".."):
+            lasttwo[0] += 1
+        if(e["seq"][-2:] == ".?"):
+            lasttwo[1] += 1
+        if(e["seq"][-2:] == "?"):
+            lasttwo[2] += 1
+        if(e["seq"][-2:] == "??"):
+            lasttwo[3] += 1
 
-def processRows(numbers, rex, txt):
+    return len(scenars), lasttwo
+
+def processRowsP1(numbers, txt):
     add = 0
+    resultsP1 = []
+    lasttwo = []
     for i in range(len(txt)):
-        stat = stats(numbers[i], rex[i], txt[i])
-        add += scenarios(stat, numbers[i])
+        stat = stats(numbers[i], txt[i])
+        result, lttemp = scenarios(stat, numbers[i])
+        lasttwo.append(lttemp)
+        add += result
+        resultsP1.append(result)
     print("Part 1: the sum of possibilities is", add)
+    return(resultsP1, lasttwo)
+
+def processRowsP2(numbers, txt, resultsP1, lasttwo):
+    # breakpoint()
+    value = 2
+    add = 0
+    l = len(txt)
+    for i in range(l):
+        # numbers[i] = numbers[i] * value
+        stat = stats(numbers[i], txt[i])
+        # print("entry: stat=", stat, "numbers[i]=", numbers[i])
+        numbers[i] = numbers[i] * value
+        stat["seq"] = (stat["seq"] + '?') * value
+        # print("before", stat["seq"])
+        stat["seq"] = stat["seq"][:-1] + ' '
+        # stat["seq"] = stat["seq"] + '?' + stat["seq"]
+
+        stat = stats(numbers[i], stat["seq"])
+        print("Part 2: processing (", i / l * 100, " %)", sep="", end="\r")
+        # print("after ", stat["seq"])
+        # stat["shToFind"] *= value
+        # stat["dotToFind"] *= value
+
+        # print("after: stat=", stat, "numbers[i]=", numbers[i])
+        # print(stat["seq"], numbers[i])
+        # breakpoint()
+        result = scenarios(stat, numbers[i])
+        # print(result, end=" ")
+        result = result // resultsP1[i]
+        result = resultsP1[i] * (result ** 4)
+        # print(result, resultsP1[i])
+        add += result
+        # print(result)
+    print("Part 2: the sum of possibilities is", add)
 
 if __name__ == "__main__":
     txt = readFile()
-    parseLines(txt)
-    numbers, rex = parseLines(txt)
-    processRows(numbers, rex, txt)
+    extractNumbers(txt)
+    numbers = extractNumbers(txt)
+    resultsP1, lasttwo = processRowsP1(numbers, txt)
+    # processRowsP2(numbers, txt, resultsP1, lasttwo)
+    print(lasttwo)
